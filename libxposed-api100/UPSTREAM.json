@@ -1,0 +1,94 @@
+{
+  "repo": "https://github.com/libxposed/api",
+  "commit": "e2588ee24bbef12c7c2e07666efa60e58e1ee6b3",
+  "files": [
+    {
+      "path": "LICENSE",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "261eeb9e9f8b2b4b0d119366dda99c6fd7d35c64",
+      "size": 11357,
+      "url": "https://api.github.com/repos/libxposed/api/git/blobs/261eeb9e9f8b2b4b0d119366dda99c6fd7d35c64"
+    },
+    {
+      "path": "api/src/main/java/io/github/libxposed/api/XposedInterface.java",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "4e6a3e279ffa8231c57051a5569c1226b9435867",
+      "size": 17843,
+      "url": "https://api.github.com/repos/libxposed/api/git/blobs/4e6a3e279ffa8231c57051a5569c1226b9435867"
+    },
+    {
+      "path": "api/src/main/java/io/github/libxposed/api/XposedInterfaceWrapper.java",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "fcac1cef3a022b71c6a1605474b1783b13305d56",
+      "size": 4657,
+      "url": "https://api.github.com/repos/libxposed/api/git/blobs/fcac1cef3a022b71c6a1605474b1783b13305d56"
+    },
+    {
+      "path": "api/src/main/java/io/github/libxposed/api/XposedModule.java",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "b2e1a03c295b7f200809aa2e9b0af8ebf6702643",
+      "size": 818,
+      "url": "https://api.github.com/repos/libxposed/api/git/blobs/b2e1a03c295b7f200809aa2e9b0af8ebf6702643"
+    },
+    {
+      "path": "api/src/main/java/io/github/libxposed/api/XposedModuleInterface.java",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "1cb548c2240821ffdf735d8950f496591e385363",
+      "size": 2802,
+      "url": "https://api.github.com/repos/libxposed/api/git/blobs/1cb548c2240821ffdf735d8950f496591e385363"
+    },
+    {
+      "path": "api/src/main/java/io/github/libxposed/api/annotations/AfterInvocation.java",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "e26b3188bab0a57625c8fd309eac46aff1b6a353",
+      "size": 310,
+      "url": "https://api.github.com/repos/libxposed/api/git/blobs/e26b3188bab0a57625c8fd309eac46aff1b6a353"
+    },
+    {
+      "path": "api/src/main/java/io/github/libxposed/api/annotations/BeforeInvocation.java",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "7b4a17b8a09625b09546a5a80eda8d21ef39b502",
+      "size": 311,
+      "url": "https://api.github.com/repos/libxposed/api/git/blobs/7b4a17b8a09625b09546a5a80eda8d21ef39b502"
+    },
+    {
+      "path": "api/src/main/java/io/github/libxposed/api/annotations/XposedHooker.java",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "acff8c03888ef25d85096956ff94d45e3773731e",
+      "size": 329,
+      "url": "https://api.github.com/repos/libxposed/api/git/blobs/acff8c03888ef25d85096956ff94d45e3773731e"
+    },
+    {
+      "path": "api/src/main/java/io/github/libxposed/api/errors/HookFailedError.java",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "0eb4b052d2a75ba748a7a5c65d66e97ae81526fa",
+      "size": 464,
+      "url": "https://api.github.com/repos/libxposed/api/git/blobs/0eb4b052d2a75ba748a7a5c65d66e97ae81526fa"
+    },
+    {
+      "path": "api/src/main/java/io/github/libxposed/api/errors/XposedFrameworkError.java",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "0b3bba005445938dfb9e160d11f1b3283b850ed7",
+      "size": 435,
+      "url": "https://api.github.com/repos/libxposed/api/git/blobs/0b3bba005445938dfb9e160d11f1b3283b850ed7"
+    },
+    {
+      "path": "api/src/main/java/io/github/libxposed/api/utils/DexParser.java",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "00a5f439fe309281fa57a9ce7bc1fd5df984faab",
+      "size": 8728,
+      "url": "https://api.github.com/repos/libxposed/api/git/blobs/00a5f439fe309281fa57a9ce7bc1fd5df984faab"
+    }
+  ]
+}

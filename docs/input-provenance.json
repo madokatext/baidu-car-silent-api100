@@ -1,0 +1,107 @@
+[
+  {
+    "archive": "classes10_smali(1).zip",
+    "sha256": "9d71b923e1495c6d6359d84c38e90ce611101108f21eca5201d79205c2e6612f",
+    "smali_entries": 7100,
+    "referenced_files": []
+  },
+  {
+    "archive": "classes11_smali(1).zip",
+    "sha256": "8a343c1302783055846034cf6bea26a90ab5e80cfea43ed1a440398a9250b84b",
+    "smali_entries": 7721,
+    "referenced_files": []
+  },
+  {
+    "archive": "classes12_smali(1).zip",
+    "sha256": "12486db9c716df9c83fdc685e8bb6e104836aafe069fb78570428c7efb05364a",
+    "smali_entries": 8400,
+    "referenced_files": []
+  },
+  {
+    "archive": "classes13_smali(1).zip",
+    "sha256": "6f13ba71d6fdb3bcc8881a5d6f9d35e33c22609297485cdc4907a27758535fac",
+    "smali_entries": 8275,
+    "referenced_files": []
+  },
+  {
+    "archive": "classes2_smali(7).zip",
+    "sha256": "49ed43a12c4973256dc2c4c3d6393b383c9e8d59c9d7b5301e27a4b66a97cfb1",
+    "smali_entries": 8654,
+    "referenced_files": []
+  },
+  {
+    "archive": "classes3_smali(8).zip",
+    "sha256": "0f438e834c0c64350bb2b9d8e40ddb84aadc4e559e16fa1c393e3e3d49f8421a",
+    "smali_entries": 8532,
+    "referenced_files": []
+  },
+  {
+    "archive": "classes4_smali(4).zip",
+    "sha256": "55713e0133188df77f6658443e6c5911c9de6983a94e5cf5fef79a74e47eb45f",
+    "smali_entries": 8397,
+    "referenced_files": [
+      {
+        "path": "u1/d.smali",
+        "sha256": "3bcede43f8e1a40ea1d8047fd62753f43b3b18e5471eb0be985a4c0d2bdfc409"
+      }
+    ]
+  },
+  {
+    "archive": "classes5_smali(4).zip",
+    "sha256": "590029898b0b18a7584849775e77658a114a2147cc5bd3f4a00493ff3fae556e",
+    "smali_entries": 2879,
+    "referenced_files": []
+  },
+  {
+    "archive": "classes6_smali(4).zip",
+    "sha256": "031d644492ada8794a77821170796871a695988021dbb0d796ad311235c8e03c",
+    "smali_entries": 8095,
+    "referenced_files": [
+      {
+        "path": "com/baidu/baidumaps/aihome/search/LuiSearchPresenter.smali",
+        "sha256": "07f0344a1a200abf1928dae553f7efdaeb24c0108b3dafef5713bcf1fd83d73a"
+      },
+      {
+        "path": "com/baidu/baidumaps/lui/uicomponent/bottom/LuiInputPresenter.smali",
+        "sha256": "3006192d01a7862b5bfbc8180916d3c0ddb833f99dc71b3e486eebe4dd32c5dc"
+      },
+      {
+        "path": "com/baidu/baidumaps/lui/uicomponent/bottom/LuiInputTextSwitcherPresenter.smali",
+        "sha256": "3cac66821a3866388d0f04431b39b5c5541ccc90caf8fbcce4ce7350c9cf1c9f"
+      }
+    ]
+  },
+  {
+    "archive": "classes7_smali(3).zip",
+    "sha256": "73bbc8f4b7fd280cd9ab6ca01ef6a465222473ed62dce257d017fd17481c77e1",
+    "smali_entries": 8760,
+    "referenced_files": [
+      {
+        "path": "com/baidu/baidumaps/process/callback/CarTransferCallback.smali",
+        "sha256": "fe49a07d3fc0687198be0ad01f95bb849defdb5f380adfa2bd576d73e3b38d3f"
+      },
+      {
+        "path": "com/baidu/baidumaps/process/callback/CarTransferCallback$checkTopPageAndShow$1.smali",
+        "sha256": "d90a1ed21fed94bde71c6e8c536b71aca535816208732c1b0cc8b02ef44f9cbe"
+      }
+    ]
+  },
+  {
+    "archive": "classes8_smali(3).zip",
+    "sha256": "46dccbb1f4b0d86ba83fdd9d20d505bbebe1d5d2ffc59fe7dbab99ab6be767a8",
+    "smali_entries": 4785,
+    "referenced_files": []
+  },
+  {
+    "archive": "classes9_smali(1).zip",
+    "sha256": "824007b30bdb13caf963555896f7fe31ccd864f4cbaf8c89013ac941065dfaa9",
+    "smali_entries": 6506,
+    "referenced_files": []
+  },
+  {
+    "archive": "classes_smali(10).zip",
+    "sha256": "103f50fe248563d0119b049e7b7f04af5dbb959003cffb286bbecf3566f7d97a",
+    "smali_entries": 8246,
+    "referenced_files": []
+  }
+]
