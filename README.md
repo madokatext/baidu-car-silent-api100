@@ -4,8 +4,12 @@
 包含完整源码、固定版本的官方 API 100 源码、Gradle Wrapper、GitHub Actions。
 项目仓库：https://github.com/madokatext/baidu-car-silent-api100
 
-**验证状态：Java 编译与静态调用链检查已通过；未进行手机/车机实测。
+**验证状态：GitHub Actions 已成功构建 Debug / Release APK；
+Debug APK 的模块元数据及 DEX 检查通过；未进行手机/车机实测。
 现有附件不能唯一确定所述弹窗的生成入口，因此不宣称已验证“永远不弹窗且所有互联功能零影响”。**
+
+[首次成功构建](https://github.com/madokatext/baidu-car-silent-api100/actions/runs/34037935979) ·
+[下载该次 APK 产物](https://github.com/madokatext/baidu-car-silent-api100/actions/runs/34037935979/artifacts/9990781628)
 
 ## 改哪里
 
