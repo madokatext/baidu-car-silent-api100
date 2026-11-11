@@ -1,6 +1,8 @@
 package io.github.baiducarsilent;
 
 import android.app.Dialog;
+import android.content.Context;
+import android.content.DialogInterface;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.Window;
@@ -26,6 +28,9 @@ public final class SilentModule extends XposedModule {
     private static final String CALLBACK =
             "com.baidu.baidumaps.process.callback.CarTransferCallback";
     private static final String AUTO_TASK = CALLBACK + "$checkTopPageAndShow$1";
+    private static final String UPGRADE_PACKAGE = "com.baidu.baidumaps.common.upgrade.";
+    private static final String UPGRADE_CONTROLLER = UPGRADE_PACKAGE + "VersionUpdateController";
+    private static final String DOWNLOAD_DIALOG = UPGRADE_PACKAGE + "VersionDownloadDialogWrapper";
     private static final String TITLE = "手车已互联";
     private static final AtomicInteger BLOCK_LOGS = new AtomicInteger();
     private static final AtomicInteger ERROR_LOGS = new AtomicInteger();
@@ -47,7 +52,78 @@ public final class SilentModule extends XposedModule {
         initialized = true;
         log("[BaiduCarSilent] API 100; installing UI hooks");
         installAutoUiHooks(param.getClassLoader());
+        installVersionUpgradeHooks(param.getClassLoader());
         installWindowHooks();
+    }
+
+    private void installVersionUpgradeHooks(ClassLoader loader) {
+        // Audited in the supplied smali: dispatch, recommendation, force-upgrade,
+        // and the actual WebView-backed update/install dialog, respectively.
+        for (String name : new String[]{"q0", "i0", "g0", "t0"}) {
+            installUpgradeVoidMethod(loader, UPGRADE_CONTROLLER, name);
+        }
+        // e() delegates to f(); f() also restores a hidden download dialog.
+        installUpgradeVoidMethod(loader, DOWNLOAD_DIALOG, "f");
+
+        try {
+            Class<?> startup = Class.forName(
+                    "com.baidu.baidumaps.common.app.startup.e", false, loader);
+            Class<?> handler = Class.forName(
+                    "com.baidu.mapframework.nirvana.looper.MainLooperHandler", false, loader);
+            Method method = startup.getDeclaredMethod("h", int.class, Context.class,
+                    DialogInterface.OnClickListener.class, DialogInterface.OnClickListener.class,
+                    handler);
+            requireInstanceVoid(method);
+            // This startup helper is shared. Only kind=1 belongs to version upgrade;
+            // kind=0 has a separate startup flow and must remain untouched.
+            install(method, UpgradeStartupHook.class);
+            deopt(method);
+        } catch (ReflectiveOperationException | LinkageError | RuntimeException | XposedFrameworkError e) {
+            reportError("version-upgrade startup hook unavailable", e);
+        }
+
+        // Deoptimize the known call sites, including asynchronous message/download
+        // callbacks. No global class-loader, Handler or network interception.
+        for (String name : new String[]{UPGRADE_CONTROLLER, DOWNLOAD_DIALOG,
+                UPGRADE_CONTROLLER + "$a", UPGRADE_CONTROLLER + "$d",
+                UPGRADE_CONTROLLER + "$e", UPGRADE_CONTROLLER + "$l",
+                UPGRADE_CONTROLLER + "$DownloadStateReceiver"}) {
+            try {
+                Class<?> caller = Class.forName(name, false, loader);
+                for (Method method : caller.getDeclaredMethods()) {
+                    if (!Modifier.isAbstract(method.getModifiers())
+                            && !Modifier.isNative(method.getModifiers())) deopt(method);
+                }
+            } catch (ReflectiveOperationException | LinkageError | RuntimeException | XposedFrameworkError e) {
+                reportError("version-upgrade caller deoptimization unavailable: " + name, e);
+            }
+        }
+    }
+
+    private void installUpgradeVoidMethod(ClassLoader loader, String className, String name) {
+        try {
+            Method method = Class.forName(className, false, loader).getDeclaredMethod(name);
+            requireInstanceVoid(method);
+            install(method, VersionUpgradeHook.class);
+        } catch (ReflectiveOperationException | LinkageError | RuntimeException | XposedFrameworkError e) {
+            // Keep the other independent upgrade hooks and the window fallback active.
+            reportError("version-upgrade hook unavailable: " + className + "." + name, e);
+        }
+    }
+
+    private static void requireInstanceVoid(Method method) throws NoSuchMethodException {
+        if (method.getReturnType() != void.class || Modifier.isStatic(method.getModifiers())) {
+            throw new NoSuchMethodException("expected instance void method: " + method);
+        }
+    }
+
+    private static boolean isVersionUpgradeWindow() {
+        // A dedicated upgrade-package caller is stronger evidence than visible words
+        // such as "update", which also occur in offline-map/voice/data dialogs.
+        for (StackTraceElement frame : new Throwable().getStackTrace()) {
+            if (frame.getClassName().startsWith(UPGRADE_PACKAGE)) return true;
+        }
+        return false;
     }
 
     private void installAutoUiHooks(ClassLoader loader) {
@@ -171,6 +247,27 @@ public final class SilentModule extends XposedModule {
     }
 
     @XposedHooker
+    public static final class VersionUpgradeHook implements Hooker {
+        @BeforeInvocation
+        public static void before(BeforeHookCallback callback) {
+            callback.returnAndSkip(null);
+            blocked("version-upgrade UI");
+        }
+    }
+
+    @XposedHooker
+    public static final class UpgradeStartupHook implements Hooker {
+        @BeforeInvocation
+        public static void before(BeforeHookCallback callback) {
+            Object[] args = callback.getArgs();
+            if (args.length > 0 && Integer.valueOf(1).equals(args[0])) {
+                callback.returnAndSkip(null);
+                blocked("version-upgrade startup prompt");
+            }
+        }
+    }
+
+    @XposedHooker
     public static final class DialogHook implements Hooker {
         private static final ThreadLocal<Boolean> INSPECTING = new ThreadLocal<>();
 
@@ -178,6 +275,11 @@ public final class SilentModule extends XposedModule {
         public static void before(BeforeHookCallback callback) {
             if (!(callback.getThisObject() instanceof Dialog dialog) || dialog.isShowing()
                     || Boolean.TRUE.equals(INSPECTING.get())) return;
+            if (isVersionUpgradeWindow()) {
+                callback.returnAndSkip(null);
+                blocked("dialog from version-upgrade package");
+                return;
+            }
             INSPECTING.set(true);
             try {
                 // create() performs onCreate/inflation without attaching a window.
@@ -202,6 +304,11 @@ public final class SilentModule extends XposedModule {
         @BeforeInvocation
         public static void before(BeforeHookCallback callback) {
             if (!(callback.getThisObject() instanceof PopupWindow popup)) return;
+            if (isVersionUpgradeWindow()) {
+                callback.returnAndSkip(null);
+                blocked("popup from version-upgrade package");
+                return;
+            }
             try {
                 if (containsTargetTitle(popup.getContentView())) {
                     callback.returnAndSkip(null);

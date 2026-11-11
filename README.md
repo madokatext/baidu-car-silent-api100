@@ -4,12 +4,17 @@
 包含完整源码、固定版本的官方 API 100 源码、Gradle Wrapper、GitHub Actions。
 项目仓库：https://github.com/madokatext/baidu-car-silent-api100
 
-**验证状态：GitHub Actions 已成功构建 Debug / Release APK；
+**当前版本 1.1.0：新增应用版本升级弹窗拦截。按用户要求，本次未运行测试、
+静态验证脚本或构建，提交使用 `[skip ci]` 跳过 Actions。**
+
+**1.0.0 历史验证：GitHub Actions 已成功构建 Debug / Release APK；
 Debug APK 的模块元数据及 DEX 检查通过；未进行手机/车机实测。
 现有附件不能唯一确定所述弹窗的生成入口，因此不宣称已验证“永远不弹窗且所有互联功能零影响”。**
 
-[首次成功构建](https://github.com/madokatext/baidu-car-silent-api100/actions/runs/34037935979) ·
-[下载该次 APK 产物](https://github.com/madokatext/baidu-car-silent-api100/actions/runs/34037935979/artifacts/9990781628)
+[1.0.0 首次成功构建](https://github.com/madokatext/baidu-car-silent-api100/actions/runs/34037935979) ·
+[1.0.0 APK 产物](https://github.com/madokatext/baidu-car-silent-api100/actions/runs/34037935979/artifacts/9990781628)
+
+上述历史 APK 不包含本次升级弹窗拦截。
 
 ## 改哪里
 
@@ -56,6 +61,30 @@ CarTransferCallback.onReceiveMessage(...)
 调用 `show()` 前已经发生的应用行为，以及未知 Dialog 对 `onShow/onDismiss`
 回调的业务依赖，都不能靠通用文本筛选证明无影响。
 已确认的自动重置页面栈路径由上游专用 hook 处理；其它未知路径不作保证。
+
+## 应用版本升级弹窗（1.1.0 新增）
+
+根据附件 `classes6_smali(4).zip` 中的实际调用链，在窗口创建前返回：
+
+| 入口 | 拦截范围 |
+| --- | --- |
+| `VersionUpdateController.q0()V` | 升级结果的 UI 分发 |
+| `VersionUpdateController.i0()V` | 推荐升级、静默下载完成后的安装提醒及升级前置提示 |
+| `VersionUpdateController.g0()V` | 带“版本升级 / 退出程序”按钮的强制升级窗口 |
+| `VersionUpdateController.t0()V` | 普通升级及已下载 APK 的安装确认窗口；内容包含 WebView |
+| `VersionDownloadDialogWrapper.f()V` | 升级下载窗口的创建、显示和重新显示 |
+| 启动辅助类 `common.app.startup.e.h(...)` | 仅拦截首参数为 `1` 的升级分支；保留其他分支 |
+| `Dialog` / `PopupWindow` 展示时的调用栈 | 调用来自 `common.upgrade.` 包时，在窗口显示前阻止 |
+
+不依靠“更新”“升级”等泛词或服务端 HTML 文案判断版本弹窗。
+也不会点击取消、退出程序或安装按钮，不会先显示再关闭窗口。
+检查更新的网络请求及下载机制仍由百度地图执行；主动检查更新触发的上述升级窗口
+同样会被抑制，安装新版可使用外部安装包或应用商店。
+离线地图、语音包、组件和隐私提示不属于本次升级弹窗拦截目标。
+
+方法名称对应所提供的百度地图版本；新增或改名的入口仍可能需要适配。
+本次未进行编译或运行验证，不把静态定位结果表述为真机效果保证。
+定位细节见 [升级弹窗调用链](docs/UPGRADE_FINDINGS.md)。
 
 ## GitHub Actions 构建
 
